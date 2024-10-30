@@ -21,18 +21,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build Docker image	#打包镜像
+      - name: Build Docker image	# 打包镜像
         run: |
-          docker build -t yydsxll/jctest:${{ github.sha }} .
-          docker tag yydsxll/jctest:${{ github.sha }} yydsxll/jctest:latest
+           TIMESTAMP=$(date +'%Y%m%d')
+           docker build -t yydsxll/jctest:$TIMESTAMP .
+           docker tag yydsxll/jctest:$TIMESTAMP yydsxll/jctest:latest
 
-      - name: Login to Docker Hub	#登录Docker Hub
+      - name: Login to Docker Hub	# 登录Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+         username: ${{ secrets.DOCKERHUB_USERNAME }}
+         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image to Docker Hub	#推送到Docker Hub
+      - name: Push Docker image to Docker Hub	# 推送到Docker Hub
         run: |
-          docker push yydsxll/jctest:latest
-          docker push yydsxll/jctest:${{ github.sha }}
+         TIMESTAMP=$(date +'%Y%m%d')
+         docker push yydsxll/jctest:latest
+         docker push yydsxll/jctest:$TIMESTAMP
