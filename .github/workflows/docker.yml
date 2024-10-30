@@ -1,9 +1,17 @@
 name: Docker	#名字随意
 
 on:
-  push:
-    branches:
-      - main # 触发工作流的分支
+  push: # push 到主分支自动 发布
+    branches: ["main"]
+    paths-ignore: # 忽略一些不必要的文件
+      - ".gitignore"
+      - "README.md"
+      - "README.linux.md"
+      - "配置文件说明.md"
+      - ".vscode/**"
+      - ".img/**"
+  pull_request:
+    branches: ["main"]
 
 jobs:
   build:
@@ -15,8 +23,8 @@ jobs:
 
       - name: Build Docker image	#打包镜像
         run: |
-          docker build -t yydsxll/aujctest:${{ github.sha }} .
-          docker tag username/dbdemo:${{ github.sha }} yydsxll/aujctest:latest
+          docker build -t yydsxll/jctest:${{ github.sha }} .
+          docker tag yydsxll/jctest:${{ github.sha }} yydsxll/jctest:latest
 
       - name: Login to Docker Hub	#登录Docker Hub
         uses: docker/login-action@v1
@@ -26,5 +34,5 @@ jobs:
 
       - name: Push Docker image to Docker Hub	#推送到Docker Hub
         run: |
-          docker push yydsxll/aujctest:latest
-          docker push yydsxll/aujctest:${{ github.sha }}
+          docker push yydsxll/jctest:latest
+          docker push yydsxll/jctest:${{ github.sha }}
