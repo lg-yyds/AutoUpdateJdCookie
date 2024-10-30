@@ -1,0 +1,30 @@
+name: Docker	#名字随意
+
+on:
+  push:
+    branches:
+      - main # 触发工作流的分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image	#打包镜像
+        run: |
+          docker build -t yydsxll/aujctest:${{ github.sha }} .
+          docker tag username/dbdemo:${{ github.sha }} yydsxll/aujctest:latest
+
+      - name: Login to Docker Hub	#登录Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image to Docker Hub	#推送到Docker Hub
+        run: |
+          docker push yydsxll/aujctest:latest
+          docker push yydsxll/aujctest:${{ github.sha }}
