@@ -54,8 +54,11 @@ is_send_fail_msg = True
 # 配置发送地址
 send_info = {
     "send_wecom": [
+        "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="
     ],
     "send_webhook": [
+        "http://127.0.0.1:3000/webhook",
+        "http://127.0.0.1:4000/webhook"
     ],
     "send_dingtalk": [
     ],
