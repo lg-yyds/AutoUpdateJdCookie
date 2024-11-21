@@ -28,16 +28,7 @@ jobs:
 
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v1.6.0
-
-      - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@v1.14.1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          MYGITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+  
       - name: Login to DockerHub
         uses: docker/login-action@v1.14.1
         with:
@@ -56,5 +47,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/arm64,linux/arm/v7
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+          标签: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/e5:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/e5:${{ env.RELEASE_VERSION }}
