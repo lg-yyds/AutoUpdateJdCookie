@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3.6.2
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/e5:${{ env.RELEASE_VERSION }}
 
       - name: Build 和 push Docker image
         id: build-and-push
