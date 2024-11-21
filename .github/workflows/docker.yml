@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Docker image to Docker Hub # 打包并推送镜像
+      - name: Build 和 Push Docker image to Docker Hub # 打包并推送镜像
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -38,4 +38,4 @@ jobs:
           tags: |
             yydsxll/jctest:latest
             yydsxll/jctest:${{ github.run_id }}
-          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm,linux/arm64
