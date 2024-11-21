@@ -38,4 +38,4 @@ jobs:
           tags: |
             yydsxll/jctest:latest
             yydsxll/jctest:${{ github.run_id }}
-          platforms: linux/amd64,linux/arm,linux/arm64
+          platforms: linux/amd64,linux/arm64
