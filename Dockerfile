@@ -1,24 +1,31 @@
-# 使用官方 Python 3.10.14 基础镜像
-FROM python:3.10.14-slim
+# 使用官方 Python 3.10-slim 作为基础镜像
+FROM python:3.10-slim as base
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    TZ=Asia/Shanghai
+
+# 安装系统依赖和 Python 环境依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录
 WORKDIR /app
 
-# 复制 requirements.txt 并安装依赖
+# 复制依赖文件
 COPY requirements.txt .
 
-# 安装依赖
-RUN pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
-RUN playwright install chromium
-RUN playwright install-deps
+# 安装 Python 依赖和 Playwright（多阶段减少临时文件）
+RUN pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ \
+    && playwright install chromium \
+    && playwright install-deps \
+    && apt-get remove -y tzdata && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
-
-# 时区
-RUN apt-get install -y tzdata
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 复制应用文件
 COPY . .
 
-# 定义启动命令，运行 main.py
+# 启动主程序
 CMD ["python", "schedule_main.py"]
