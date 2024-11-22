@@ -36,6 +36,7 @@ jobs:
           context: .
           push: true
           tags: |
+            TIMESTAMP=$(date +'%Y%m%d')
             yydsxll/jctest:latest
-            yydsxll/jctest:${{ github.run_id }}
+            yydsxll/jctest:$TIMESTAMP
           platforms: linux/amd64,linux/arm64
